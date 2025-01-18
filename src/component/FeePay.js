@@ -138,9 +138,8 @@ const FeePay = () => {
           className="border p-2 mr-4"
         />
 
-      </div>
-
-            </div>
+         </div>
+        </div>
 
             <table className="table-auto w-full border-collapse mt-10">
          <thead>
