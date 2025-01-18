@@ -14,6 +14,11 @@ const FeePay = () => {
       const [error, setError] = useState(null);
       const [nameFilter, setNameFilter] = useState('');
       const [categoryFilter, setCategoryFilter] = useState('');
+       const navigator = useNavigate();
+
+         const [isOpen, setIsOpen] = useState(false);
+             const [isLoggedIn, setIsLoggedIn] = useState(false)
+               const [storedUser, setStoredUser] = useState()
     
 
       const location = useLocation()
@@ -22,6 +27,29 @@ const FeePay = () => {
       const handleClick = (Link) => {
         setActiveLink(Link)  
       }
+
+         useEffect(() => {
+              const data = localStorage.getItem('user');  
+              if (data){ 
+                try {
+                  setStoredUser(JSON.parse(data));
+                } catch (error) {
+                  console.error('Error parsing user data:', error);
+                }
+              }
+            }, []);
+          
+             const handleButtonClick = () => {
+              localStorage.setItem('user', "");
+               if (isLoggedIn) {
+                 localStorage.setItem('isLoggedIn', 'false');
+                 setIsLoggedIn(false);
+                 navigator("/")
+              } else {
+            localStorage.setItem('isLoggedIn', 'true');
+                 setIsLoggedIn(true);
+               }
+             };
 
       const fetchData = async () => {
       const url = '  https://sandbox-api.xcelapp.com/upsa/v1/product/getProducts?state=ALL'; 
@@ -60,13 +88,14 @@ const FeePay = () => {
 
   if (error) {
     return <div>Error: {error}</div>;
-  };     
+  };    
+  
 
   return (
     <div className="">
          <div  className=" mt-10 bg-blue-800 text-white h-[10rem]">
               <div className='flex justify-between relative top-10'>
-              <div  className="ml-20">
+              <div  className="ml-20 relative top-[-0.6rem]">
            <span className='text-red-800 text-4xl'>e</span><span className='text-4xl'>tranzact</span>
            </div>
       
@@ -92,7 +121,7 @@ const FeePay = () => {
               
             </div>
       
-            <button  className="flex justify-center mr-20 bg-black rounded-full w-20 h-8">
+            <button onClick={handleButtonClick} className="flex justify-center mr-20 bg-black rounded-full w-20 h-8">
                Logout
             </button>
       
@@ -113,7 +142,7 @@ const FeePay = () => {
 
             </div>
 
-        <table className="table-auto w-full border-collapse mt-10">
+            <table className="table-auto w-full border-collapse mt-10">
          <thead>
           <tr>
             <th className="border p-2">ID</th>
@@ -133,7 +162,7 @@ const FeePay = () => {
                 <td className="border p-2">{product.productCode}</td>
                 <td className="border p-2">{product.name}</td>
                 <td className="border p-2">{product.category}</td>
-                <td className="border p-2">{product.academicYear?.name}</td> {/* Accessing nested object */}
+                <td className="border p-2">{product.academicYear?.name}</td> 
                 <td className="border p-2">{product.amount}</td>
                 <td className="border p-2">{product.active ? 'Yes' : 'No'}</td>
               </tr>
@@ -145,7 +174,6 @@ const FeePay = () => {
            )}
         </tbody>
       </table>
-
     </div>
     
   );
