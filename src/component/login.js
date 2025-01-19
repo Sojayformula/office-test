@@ -63,7 +63,7 @@ const Login = () => {
 
         let isError =  errorHandler();
 
-        console.log('errorinputData', errorinputData)
+        console.log('errorinputData', errorinputData);
 
         if( isError !== true){
             
@@ -147,7 +147,7 @@ const Login = () => {
                 </div>
 
                 <div className='flex justify-center mx-10 mt-16 bg-purple-600 py-2  md:text-2xl rounded-lg'>
-                <button className='bg-purple-600 text-white' >Login</button>
+                <button className='bg-purple-600 text-white'>Login</button>
                 </div> 
                 <div className='mt-2 mb-4'>
                 <Link to="/register" className='mx-6 md:mx-8 text-gray-400 text-sm'>Don't have an account? <span className='text-purple-600 underline'>Create Account</span></Link>
