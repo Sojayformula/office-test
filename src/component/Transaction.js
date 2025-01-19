@@ -9,7 +9,6 @@ const FeePay = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [typeFilter, setTypeFilter] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
   const navigator = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -55,7 +54,7 @@ const FeePay = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const transactions = response.data.transactions; // Assuming 'transactions' is the array in the response
+      const transactions = response.data.transactions; 
       setTransactions(transactions);
       setLoading(false);
     } catch (error) {
@@ -71,8 +70,7 @@ const FeePay = () => {
 
   const filteredTransactions = transactions.filter((transaction) => {
     const typeMatches = transaction.type.toLowerCase().includes(typeFilter.toLowerCase());
-    const categoryMatches = categoryFilter === '' || transaction.category?.toLowerCase() === categoryFilter.toLowerCase();
-    return typeMatches && categoryMatches;
+    return typeMatches ;
   });
 
   if (loading) {
@@ -120,15 +118,7 @@ const FeePay = () => {
             onChange={(e) => setTypeFilter(e.target.value)}
             className="border p-2 mr-4"
           />
-          {/* <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="border p-2"
-          >
-            <option value="">All Categories</option>
-            <option value="Category1">Category1</option>
-            <option value="Category2">Category2</option>
-          </select> */}
+         
         </div>
       </div>
 

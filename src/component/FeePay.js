@@ -13,7 +13,6 @@ const FeePay = () => {
       const [loading, setLoading] = useState(true); 
       const [error, setError] = useState(null);
       const [nameFilter, setNameFilter] = useState('');
-      const [categoryFilter, setCategoryFilter] = useState('');
        const navigator = useNavigate();
 
          const [isOpen, setIsOpen] = useState(false);
@@ -78,8 +77,7 @@ const FeePay = () => {
 
   const filteredProducts = products.filter((product) => {
     const nameMatches = product.name.toLowerCase().includes(nameFilter.toLowerCase());
-    const categoryMatches = categoryFilter === '' || product.category === categoryFilter;
-    return nameMatches && categoryMatches;
+    return nameMatches;
   });
 
   if (loading) {

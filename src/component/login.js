@@ -21,6 +21,14 @@ const Login = () => {
         password: "",
     });
 
+    const [errorInput, setErrorInput] = useState()
+
+    //    const handleError = () => {
+    //     if(!errorInput){
+    //         setErrorInput("")
+    //     }
+    //    }
+
     const handleChange = (e) => {
         setInputData({
             ... inputData, [e.target.name]: e.target.value
@@ -58,19 +66,8 @@ const Login = () => {
         console.log('errorinputData', errorinputData)
 
         if( isError !== true){
-
-
-            // const validUsername = 'user123';
-            // const validPassword = 'password123';
-
-            // if (username === validUsername && password === validPassword) {
-            //     setErrorMessage('');
-            //     alert('Login successful!');
-            //   } else {
-            //     setErrorMessage('Wrong username or password');
-            //   }
             
-       
+
 
             const response = await axios.post('https://sandbox-api.xcelapp.com/upsa/v1/auth/login ', {...inputData})
                 .then(function (response){
@@ -82,12 +79,15 @@ const Login = () => {
                 })
                 .catch(function(error) {
                     console.log(error);
-                });
-        }else{
-            console.log('Error found')
-        }
-    }
+                    if (error.response && error.response.status === 401) {
+                        setErrorMessage("Invalid username or password");
+                       }else{
+                    console.log('Error found')
+                }
+                 })
+                }}
 
+    
     const bgStyle = {
         backgroundImage: `url(${image})`,
         backgroundSize: 'cover',
@@ -105,12 +105,17 @@ const Login = () => {
                     <div className='mx-6 mt-6 flex justify-between '>
                     <div className='text-white text-4xl'> 
                 </div>
-
+               
                 </div>
                 </div>
 
                 <div className='mt-[-30rem] md:mt-0'>
               <div className='flex flex-col items-center mx-6  md:mt-10 mb-4 md:mb-0'>
+
+               <div className='relative top-[-2rem]'>
+              {errormessage &&<p className="text-red-600 text-2xl">{errormessage}</p>}
+              </div>
+
                 <h1 className='text-4xl font-bold text-white'>Hello Again</h1>
                 <p className='text-gray-400'>You Welcome back</p>
               </div>
@@ -127,7 +132,6 @@ const Login = () => {
                 className='border border-gray-600 hover:border-purple-600 rounded-lg py-2 w-full placeholder:px-2 text-white bg-gray-600 px-4'
                 />
                 <span className='text-red-600 text-sm'>{errorinputData.email}</span>
-                {errormessage && <span>{errormessage}</span>}
                 </div>
                 <div>
                  <input 
