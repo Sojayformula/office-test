@@ -7,6 +7,8 @@ import { Link } from 'react-router';
 const Login = () => {
 
     const [errormessage, setErrorMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [networkError, setNetworkError] = useState('');
    
      const navigator = useNavigate()
 
@@ -61,40 +63,66 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        setIsLoading(true); 
+        setErrorMessage(''); 
+
+
         let isError =  errorHandler();
 
         console.log('errorinputData', errorinputData);
 
         if( isError !== true){
             
+            // const response = await axios.post('https://sandbox-api.xcelapp.com/upsa/v1/auth/login ', {...inputData})
+            //     .then(function (response){
+            //     console.log(response)  
+            //     navigator('/transaction')             
+            //     localStorage.setItem('token', JSON.stringify(response.data.token));
+            //     localStorage.setItem('user', JSON.stringify(response.data.user));
+            //     console.log('token', response.data.token);
+            //     })
+            //     .catch(function(error) {
+            //         console.log(error);
+            //         if (error.response && error.response.status === 401) {
+            //             setErrorMessage("Invalid username or password");
+            //             }else{
+            //          console.log('Error found')
+            //         } 
+    
+            //     })
 
-
-            const response = await axios.post('https://sandbox-api.xcelapp.com/upsa/v1/auth/login ', {...inputData})
-                .then(function (response){
-                console.log(response)  
-                navigator('/transaction')             
+               
+            try{
+                const response = await axios.post('https://sandbox-api.xcelapp.com/upsa/v1/auth/login ', {...inputData})
+                console.log(response)
+                navigator('/transaction') 
                 localStorage.setItem('token', JSON.stringify(response.data.token));
                 localStorage.setItem('user', JSON.stringify(response.data.user));
                 console.log('token', response.data.token);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        setErrorMessage("Invalid username or password");
-                       }else{
-                    console.log('Error found')
+                setIsLoading(false)
+              }catch(error){
+                console.log('respone error', error.message)
+                if(error.response && error.response.status === 401){
+                  setErrorMessage('Invalid user name or password')
+                } else if (error.message === 'Network Error') {
+                  setNetworkError('Network error. Please check your connection.');
+                }else {
+                  setErrorMessage('An unexpected error occurred. Please try again.');
+                  console.log('Unexpected error:', error.message);
                 }
-                 })
-                }}
+                  setIsLoading(false)
+        
+            }
 
-    
+              }}
+
+     
     const bgStyle = {
         backgroundImage: `url(${image})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '33rem'
       };
-
 
     return (
          <>
@@ -108,11 +136,14 @@ const Login = () => {
                
                 </div>
                 </div>
-
+              
                 <div className='mt-[-30rem] md:mt-0'>
               <div className='flex flex-col items-center mx-6  md:mt-10 mb-4 md:mb-0'>
-
-               <div className='relative top-[-2rem]'>
+            
+              {isLoading && <p className='text-white'>Loading...</p>}
+              {errormessage && <p className='text-red-600 text-lg'>{errormessage}</p>}
+              {networkError && <p className='text-red-600 relative top-[-2rem] text-lg'>{networkError}</p>}
+              <div className='relative top-[-2rem]'>
               {errormessage &&<p className="text-red-600 text-2xl">{errormessage}</p>}
               </div>
 
