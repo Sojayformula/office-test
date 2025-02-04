@@ -14,10 +14,17 @@ const FeePay = () => {
       const [loading, setLoading] = useState(true); 
       const [error, setError] = useState(null);
       const [nameFilter, setNameFilter] = useState('');
-       const navigator = useNavigate();
       const [isLoggedIn, setIsLoggedIn] = useState(false)
       const [storedUser, setStoredUser] = useState("")
       const [showMore, setShowMore] = useState(true);
+      const navigator = useNavigate();
+
+      const location = useLocation()
+      const currentPath = location.pathname
+      
+      const handleClick = (Link) => {
+        setActiveLink(Link)  
+      }
 
       const handleShowMore = () => {
         setShowMore(!showMore);
@@ -31,13 +38,6 @@ const FeePay = () => {
              const handleAcademicYearChange = (event) => {
               setSelectedAcademicYear(event.target.value);
             };
-
-      const location = useLocation()
-      const currentPath = location.pathname
-    
-      const handleClick = (Link) => {
-        setActiveLink(Link)  
-      }
 
          useEffect(() => {
               const data = localStorage.getItem('user');  
@@ -64,7 +64,7 @@ const FeePay = () => {
 
             const fetchData = async () => {
             const url = 'https://sandbox-api.xcelapp.com/upsa/v1/product/getProducts?state=APPROVED' 
-            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NWI3NDYyY2M1Y2ZmNjE5MGE2ODllNzIiLCJtZXJjaGFudElkIjoicDg3cDZndWplIiwicm9sZXMiOlt7Il9pZCI6IjY1YmZmYzM3MWI4MWNkNGFiNWJhOGQxMiIsIm5hbWUiOiJTVVBFUiBST0xFIiwicGVybWlzc2lvbnMiOlsiQ1JFQVRFX1NUQUZGIiwiQVBQUk9WRV9DUkVBVEVfQUNBREVNSUNfWUVBUiIsIkFQUFJPVkVfQ1JFQVRFX1NUQUZGIiwiQ1JFQVRFX0FDQURFTUlDX1lFQVIiLCJDUkVBVEVfUk9MRSIsIkFTU0lHTl9ST0xFIiwiQkxPQ0tfVVNFUiIsIlVOQkxPQ0tfVVNFUiIsIkVESVRfU1RBRkYiLCJFRElUX0ZFRSIsIkFVVEhPUklaRV9DUkVBVEVfRkVFIiwiVklFV19UUkFOU0FDVElPTlMiLCJQQVlfVE9fQkFOSyIsIkFVVEhPUklaRV9QQVlfVE9fQkFOSyIsIkVESVRfVVNFUiIsIkRFTEVURV9VU0VSIiwiVklFV19SRVBPUlRTIiwiVklFV19BVURJVF9UUkFJTCIsIkNSRUFURV9QUk9HUkFNIiwiQVBQUk9WRV9DUkVBVEVfUFJPR1JBTSIsIkNSRUFURV9ESVNCVVJTRU1FTlRfQUNDVCIsIkFQUFJPVkVfQVNTSUdOX1dBTExFVCIsIkFQUFJPVkVfVVBEQVRFX0ZFRSIsIkFQUFJPVkVfVVBEQVRFX0ZFRV9QQVlNRU5UIiwiQ1JFQVRFX1dBTExFVCIsIkNSRUFURV9GRUUiLCJCSUxMX1NUVURFTlQiLCJWSUVXX1NUVURFTlQiLCJNT0RJRllfU1RVREVOVF9GRUUiLCJSRVZFUlNFX1RSQU5TQUNUSU9OIiwiQVBQUk9WRV9UUkFOU0FDVElPTl9SRVZFUlNBTCJdLCJtZXJjaGFudElkIjoicDg3cDZndWplIiwiY3JlYXRlZEF0IjoiMjAyNC0wMi0wNFQyMTowNTo1OS4xNzVaIiwidXBkYXRlZEF0IjoiMjAyNS0wMS0xN1QxMzowNjo0My43MDFaIiwiX192IjowLCJkZXNjcmlwdGlvbiI6IlNhbXBsZSBSb2xlIn0seyJfaWQiOiI2NWI4Y2E4NjAzNTRlMGQzYzYzOWM4YmUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJwZXJtaXNzaW9ucyI6WyJWSUVXX0FVRElUX1RSQUlMIiwiVklFV19UUkFOU0FDVElPTlMiXSwibWVyY2hhbnRJZCI6InA4N3A2Z3VqZSIsImNyZWF0ZWRBdCI6IjIwMjQtMDEtMzBUMTA6MDg6MDYuNjI4WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDQtMDNUMjI6MTc6MzAuNTQzWiIsIl9fdiI6MCwiZGVzY3JpcHRpb24iOm51bGx9XSwiaWF0IjoxNzM4MTgwMzQyLCJleHAiOjE3MzgyNjY3NDJ9.9EYlo-H9z22fObywkI_znAn2xaOn_llqKyPlnsE6DB8'
+            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NWI3NDYyY2M1Y2ZmNjE5MGE2ODllNzIiLCJtZXJjaGFudElkIjoicDg3cDZndWplIiwicm9sZXMiOlt7Il9pZCI6IjY1YmZmYzM3MWI4MWNkNGFiNWJhOGQxMiIsIm5hbWUiOiJTVVBFUiBST0xFIiwicGVybWlzc2lvbnMiOlsiQ1JFQVRFX1NUQUZGIiwiQVBQUk9WRV9DUkVBVEVfQUNBREVNSUNfWUVBUiIsIkFQUFJPVkVfQ1JFQVRFX1NUQUZGIiwiQ1JFQVRFX0FDQURFTUlDX1lFQVIiLCJDUkVBVEVfUk9MRSIsIkFTU0lHTl9ST0xFIiwiQkxPQ0tfVVNFUiIsIlVOQkxPQ0tfVVNFUiIsIkVESVRfU1RBRkYiLCJFRElUX0ZFRSIsIkFVVEhPUklaRV9DUkVBVEVfRkVFIiwiVklFV19UUkFOU0FDVElPTlMiLCJQQVlfVE9fQkFOSyIsIkFVVEhPUklaRV9QQVlfVE9fQkFOSyIsIkVESVRfVVNFUiIsIkRFTEVURV9VU0VSIiwiVklFV19SRVBPUlRTIiwiVklFV19BVURJVF9UUkFJTCIsIkNSRUFURV9QUk9HUkFNIiwiQVBQUk9WRV9DUkVBVEVfUFJPR1JBTSIsIkNSRUFURV9ESVNCVVJTRU1FTlRfQUNDVCIsIkFQUFJPVkVfQVNTSUdOX1dBTExFVCIsIkFQUFJPVkVfVVBEQVRFX0ZFRSIsIkFQUFJPVkVfVVBEQVRFX0ZFRV9QQVlNRU5UIiwiQ1JFQVRFX1dBTExFVCIsIkNSRUFURV9GRUUiLCJCSUxMX1NUVURFTlQiLCJWSUVXX1NUVURFTlQiLCJNT0RJRllfU1RVREVOVF9GRUUiLCJSRVZFUlNFX1RSQU5TQUNUSU9OIiwiQVBQUk9WRV9UUkFOU0FDVElPTl9SRVZFUlNBTCJdLCJtZXJjaGFudElkIjoicDg3cDZndWplIiwiY3JlYXRlZEF0IjoiMjAyNC0wMi0wNFQyMTowNTo1OS4xNzVaIiwidXBkYXRlZEF0IjoiMjAyNS0wMS0xN1QxMzowNjo0My43MDFaIiwiX192IjowLCJkZXNjcmlwdGlvbiI6IlNhbXBsZSBSb2xlIn0seyJfaWQiOiI2NWI4Y2E4NjAzNTRlMGQzYzYzOWM4YmUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJwZXJtaXNzaW9ucyI6WyJWSUVXX0FVRElUX1RSQUlMIiwiVklFV19UUkFOU0FDVElPTlMiXSwibWVyY2hhbnRJZCI6InA4N3A2Z3VqZSIsImNyZWF0ZWRBdCI6IjIwMjQtMDEtMzBUMTA6MDg6MDYuNjI4WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDQtMDNUMjI6MTc6MzAuNTQzWiIsIl9fdiI6MCwiZGVzY3JpcHRpb24iOm51bGx9XSwiaWF0IjoxNzM4MzU2MDM3LCJleHAiOjE3Mzg0NDI0Mzd9.I7dVvjiG6ae-2qKT2rC6b_oDClwmETHIXiZqRQqX2DY'
           try {
             const response = await axios.get(url, {
               headers: {
@@ -87,8 +87,7 @@ const FeePay = () => {
 
         const filteredProducts = products.filter((product) => {
           const nameMatches = product.name.toLowerCase().includes(nameFilter.toLowerCase());
-          const academicYearMatches =
-          !selectedAcademicYear || product.academicYear?._id === selectedAcademicYear;
+          const academicYearMatches = !selectedAcademicYear || product.academicYear?._id === selectedAcademicYear;
           return nameMatches && academicYearMatches;
         });
 
@@ -164,7 +163,7 @@ const FeePay = () => {
         <select id="academicYear" value={selectedAcademicYear} onChange={handleAcademicYearChange} className='border p-2 w-[10rem] lg:w-auto'>
           <option value="">Select Academic Year</option>
           {products.map((product) =>
-            product.academicYear ? (
+             product.academicYear ? (
               <option key={product.academicYear._id} value={product.academicYear._id}>
                 {product.academicYear.name}
               </option>
@@ -229,4 +228,23 @@ export default FeePay;
 
 
 // // https://sandbox-api.xcelapp.com/upsa/v1/product/getProducts?state=ALL  filteredProducts
+
+
+
+
+
+// This line of code checks if the selected academic year (chosen by the user or set by default)
+//  matches the academic year associated with a product.
+
+// Here's a breakdown in plain words:
+
+// selectedAcademicYear: This is the academic year the user has chosen or selected.
+// product.academicYear?._id: This refers to the academic year associated with the product. The question mark (?) 
+// is used to avoid errors in case product.academicYear is not defined.
+// !selectedAcademicYear: This checks if no specific academic year has been selected. 
+// If no year is selected, it will be true.
+// product.academicYear?._id === selectedAcademicYear: 
+// This checks if the academic year of the product matches the one the user has selected.
+// The entire line says: "If no specific academic year is selected or the product's academic year matches the selected one, 
+// then academicYearMatches is true." Otherwise, it is false.
 

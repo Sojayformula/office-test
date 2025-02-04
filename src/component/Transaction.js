@@ -5,28 +5,30 @@ import axios from 'axios';
 
             const FeePay = () => {
 
-              const [activeLink, setActiveLink] = useState('');
               const [transactions, setTransactions] = useState([]);
               const [loading, setLoading] = useState(true);
               const [error, setError] = useState(null);
-              const [typeFilter, setTypeFilter] = useState('');
+              const [typeFilter, setTypeFilter] = useState('All');
               const navigator = useNavigate();
               const location = useLocation();
               const currentPath = location.pathname;
               const [isLoggedIn, setIsLoggedIn] = useState(false)
               const [storedUser, setStoredUser] = useState("")
               const [showMore, setShowMore] = useState(true);
+              const [transactionTypes, setTransactionTypes] = useState(['All', 'Credit', 'Debit', 'Refund']);
+              const [activeLinck, setActiveLink] = useState()
+              const [searchInput, setSearchInput] = useState('');
 
-              const handleClick = (Link) => {
-                setActiveLink(Link);
-              };
+              const handleClick =(index) => {
+                setActiveLink(index)
+              }
 
               const handleShowMore = () => {
                 setShowMore(!showMore);
             };
 
               const handleClearFilter = () => {
-                setTypeFilter('');
+                setTypeFilter('All');
                 //setSelectedAcademicYear('');
             };
 
@@ -55,7 +57,7 @@ import axios from 'axios';
 
   const fetchTransactions = async () => {
     const url = `https://sandbox-api.xcelapp.com/upsa/v1/transactions`;
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NWI3NDYyY2M1Y2ZmNjE5MGE2ODllNzIiLCJtZXJjaGFudElkIjoicDg3cDZndWplIiwicm9sZXMiOlt7Il9pZCI6IjY1YmZmYzM3MWI4MWNkNGFiNWJhOGQxMiIsIm5hbWUiOiJTVVBFUiBST0xFIiwicGVybWlzc2lvbnMiOlsiQ1JFQVRFX1NUQUZGIiwiQVBQUk9WRV9DUkVBVEVfQUNBREVNSUNfWUVBUiIsIkFQUFJPVkVfQ1JFQVRFX1NUQUZGIiwiQ1JFQVRFX0FDQURFTUlDX1lFQVIiLCJDUkVBVEVfUk9MRSIsIkFTU0lHTl9ST0xFIiwiQkxPQ0tfVVNFUiIsIlVOQkxPQ0tfVVNFUiIsIkVESVRfU1RBRkYiLCJFRElUX0ZFRSIsIkFVVEhPUklaRV9DUkVBVEVfRkVFIiwiVklFV19UUkFOU0FDVElPTlMiLCJQQVlfVE9fQkFOSyIsIkFVVEhPUklaRV9QQVlfVE9fQkFOSyIsIkVESVRfVVNFUiIsIkRFTEVURV9VU0VSIiwiVklFV19SRVBPUlRTIiwiVklFV19BVURJVF9UUkFJTCIsIkNSRUFURV9QUk9HUkFNIiwiQVBQUk9WRV9DUkVBVEVfUFJPR1JBTSIsIkNSRUFURV9ESVNCVVJTRU1FTlRfQUNDVCIsIkFQUFJPVkVfQVNTSUdOX1dBTExFVCIsIkFQUFJPVkVfVVBEQVRFX0ZFRSIsIkFQUFJPVkVfVVBEQVRFX0ZFRV9QQVlNRU5UIiwiQ1JFQVRFX1dBTExFVCIsIkNSRUFURV9GRUUiLCJCSUxMX1NUVURFTlQiLCJWSUVXX1NUVURFTlQiLCJNT0RJRllfU1RVREVOVF9GRUUiLCJSRVZFUlNFX1RSQU5TQUNUSU9OIiwiQVBQUk9WRV9UUkFOU0FDVElPTl9SRVZFUlNBTCJdLCJtZXJjaGFudElkIjoicDg3cDZndWplIiwiY3JlYXRlZEF0IjoiMjAyNC0wMi0wNFQyMTowNTo1OS4xNzVaIiwidXBkYXRlZEF0IjoiMjAyNS0wMS0xN1QxMzowNjo0My43MDFaIiwiX192IjowLCJkZXNjcmlwdGlvbiI6IlNhbXBsZSBSb2xlIn0seyJfaWQiOiI2NWI4Y2E4NjAzNTRlMGQzYzYzOWM4YmUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJwZXJtaXNzaW9ucyI6WyJWSUVXX0FVRElUX1RSQUlMIiwiVklFV19UUkFOU0FDVElPTlMiXSwibWVyY2hhbnRJZCI6InA4N3A2Z3VqZSIsImNyZWF0ZWRBdCI6IjIwMjQtMDEtMzBUMTA6MDg6MDYuNjI4WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDQtMDNUMjI6MTc6MzAuNTQzWiIsIl9fdiI6MCwiZGVzY3JpcHRpb24iOm51bGx9XSwiaWF0IjoxNzM4MTgwMzQyLCJleHAiOjE3MzgyNjY3NDJ9.9EYlo-H9z22fObywkI_znAn2xaOn_llqKyPlnsE6DB8'
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NWI3NDYyY2M1Y2ZmNjE5MGE2ODllNzIiLCJtZXJjaGFudElkIjoicDg3cDZndWplIiwicm9sZXMiOlt7Il9pZCI6IjY1YmZmYzM3MWI4MWNkNGFiNWJhOGQxMiIsIm5hbWUiOiJTVVBFUiBST0xFIiwicGVybWlzc2lvbnMiOlsiQ1JFQVRFX1NUQUZGIiwiQVBQUk9WRV9DUkVBVEVfQUNBREVNSUNfWUVBUiIsIkFQUFJPVkVfQ1JFQVRFX1NUQUZGIiwiQ1JFQVRFX0FDQURFTUlDX1lFQVIiLCJDUkVBVEVfUk9MRSIsIkFTU0lHTl9ST0xFIiwiQkxPQ0tfVVNFUiIsIlVOQkxPQ0tfVVNFUiIsIkVESVRfU1RBRkYiLCJFRElUX0ZFRSIsIkFVVEhPUklaRV9DUkVBVEVfRkVFIiwiVklFV19UUkFOU0FDVElPTlMiLCJQQVlfVE9fQkFOSyIsIkFVVEhPUklaRV9QQVlfVE9fQkFOSyIsIkVESVRfVVNFUiIsIkRFTEVURV9VU0VSIiwiVklFV19SRVBPUlRTIiwiVklFV19BVURJVF9UUkFJTCIsIkNSRUFURV9QUk9HUkFNIiwiQVBQUk9WRV9DUkVBVEVfUFJPR1JBTSIsIkNSRUFURV9ESVNCVVJTRU1FTlRfQUNDVCIsIkFQUFJPVkVfQVNTSUdOX1dBTExFVCIsIkFQUFJPVkVfVVBEQVRFX0ZFRSIsIkFQUFJPVkVfVVBEQVRFX0ZFRV9QQVlNRU5UIiwiQ1JFQVRFX1dBTExFVCIsIkNSRUFURV9GRUUiLCJCSUxMX1NUVURFTlQiLCJWSUVXX1NUVURFTlQiLCJNT0RJRllfU1RVREVOVF9GRUUiLCJSRVZFUlNFX1RSQU5TQUNUSU9OIiwiQVBQUk9WRV9UUkFOU0FDVElPTl9SRVZFUlNBTCJdLCJtZXJjaGFudElkIjoicDg3cDZndWplIiwiY3JlYXRlZEF0IjoiMjAyNC0wMi0wNFQyMTowNTo1OS4xNzVaIiwidXBkYXRlZEF0IjoiMjAyNS0wMS0xN1QxMzowNjo0My43MDFaIiwiX192IjowLCJkZXNjcmlwdGlvbiI6IlNhbXBsZSBSb2xlIn0seyJfaWQiOiI2NWI4Y2E4NjAzNTRlMGQzYzYzOWM4YmUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJwZXJtaXNzaW9ucyI6WyJWSUVXX0FVRElUX1RSQUlMIiwiVklFV19UUkFOU0FDVElPTlMiXSwibWVyY2hhbnRJZCI6InA4N3A2Z3VqZSIsImNyZWF0ZWRBdCI6IjIwMjQtMDEtMzBUMTA6MDg6MDYuNjI4WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDQtMDNUMjI6MTc6MzAuNTQzWiIsIl9fdiI6MCwiZGVzY3JpcHRpb24iOm51bGx9XSwiaWF0IjoxNzM4MzU2MDM3LCJleHAiOjE3Mzg0NDI0Mzd9.I7dVvjiG6ae-2qKT2rC6b_oDClwmETHIXiZqRQqX2DY'
     try {
       const response = await axios.get(url, {
         headers: {
@@ -76,9 +78,20 @@ import axios from 'axios';
     fetchTransactions();
   }, []);
 
+  // const filteredTransactions = transactions.filter((transaction) => {
+  //   const typeMatches = transaction.type.toLowerCase().includes(typeFilter.toLowerCase());
+  //   return typeMatches ;
+  // });
+
+  // const filteredTransactions = transactions.filter((transaction) => {
+  //   const typeMatches = typeFilter === 'All' || transaction.type.toLowerCase() === typeFilter.toLowerCase();
+  //   return typeMatches;
+  // });
+
   const filteredTransactions = transactions.filter((transaction) => {
-    const typeMatches = transaction.type.toLowerCase().includes(typeFilter.toLowerCase());
-    return typeMatches ;
+    const typeMatches = typeFilter === 'All' || transaction.type.toLowerCase() === typeFilter.toLowerCase();
+    const searchMatches = searchInput === '' || transaction.type.toLowerCase().includes(searchInput.toLowerCase());
+    return typeMatches && searchMatches;
   });
 
   const displayedProducts = showMore ? filteredTransactions : filteredTransactions.slice(0, 6);
@@ -135,14 +148,28 @@ import axios from 'axios';
           <input
             type="text"
             placeholder="Search by type"
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
+            value={ searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="border p-2 lg:mr-4"
           />
-          
 
           </div>
             <div className='mt-4 lg:mt-0 flex w-[20rem]'>
+
+            <div className="ml-4">
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="border p-2 lg:mr-4"
+            >
+              {transactionTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+
              <button onClick={handleClearFilter} className="ml-4 mx-4 lg:h-10 text-sm lg:text-lg p-2 bg-gray-500 text-white rounded">
                     Clear Search
                 </button>

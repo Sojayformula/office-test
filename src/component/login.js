@@ -104,15 +104,16 @@ const Login = () => {
                 console.log('respone error', error.message)
                 if(error.response && error.response.status === 401){
                   setErrorMessage('Invalid user name or password')
-                } else if (error.message === 'Network Error') {
-                  setNetworkError('Network error. Please check your connection.');
-                }else {
-                  setErrorMessage('An unexpected error occurred. Please try again.');
-                  console.log('Unexpected error:', error.message);
-                }
                   setIsLoading(false)
-        
-            }
+                 } else if(error.message === 'Network Error') {
+                  setNetworkError('Network error. Please check your connection.');
+                  console.log('Unexpected error:', error.message);
+                  setIsLoading(false)
+                 }else{
+                    setErrorMessage('Uexpected error')   
+                    setIsLoading(false)
+                }
+                 }
 
               }}
 
@@ -144,7 +145,6 @@ const Login = () => {
               {errormessage && <p className='text-red-600 text-lg'>{errormessage}</p>}
               {networkError && <p className='text-red-600 relative top-[-2rem] text-lg'>{networkError}</p>}
               <div className='relative top-[-2rem]'>
-              {errormessage &&<p className="text-red-600 text-2xl">{errormessage}</p>}
               </div>
 
                 <h1 className='text-4xl font-bold text-white'>Hello Again</h1>
